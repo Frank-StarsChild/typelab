@@ -10,7 +10,7 @@ cd typelab
 # 2. 安装依赖
 npm install
 
-# 3. 配置环境变量（找张老师要这两个值）
+# 3. 配置环境变量（向项目维护者获取这两个值）
 # 在项目根目录新建 .env.local 文件，写入：
 # VITE_SUPABASE_URL=xxx
 # VITE_SUPABASE_ANON_KEY=xxx
@@ -52,7 +52,7 @@ git push origin feature/你的模块名
 2. 点击「新建合并请求」
 3. 源分支：`feature/你的模块名`，目标分支：`dev`
 4. 填写 PR 描述（见下方模板）
-5. 提交后等待张老师或同学 review
+5. 提交后等待项目维护者或同学 review
 
 **PR 描述模板：**
 

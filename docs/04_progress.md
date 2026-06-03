@@ -18,7 +18,7 @@
 
 | 任务 | 负责人 | 分支 | 状态 |
 |---|---|---|---|
-| T01 骨架 | Asher | main | 已完成 |
+| T01 骨架 | Tech Lead | main | 已完成 |
 | T02 Layout | | feature/layout | 未开始 |
 | T03 Auth | | feature/auth | 未开始 |
 | T04 课程选择 | | feature/lesson-select | 未开始 |

@@ -7,7 +7,7 @@
 
 ## T01 — 项目骨架（Tech Lead 完成，不分配）
 
-**负责人**：Asher
+**负责人**：Tech Lead
 **分支**：`main`（直接初始化）
 
 - [x] `npm create vue@latest`，选 Vue Router + Pinia，不选 TypeScript
