@@ -13,6 +13,7 @@
 - [x] `npm create vue@latest`，选 Vue Router + Pinia，不选 TypeScript
 - [x] 安装 Tailwind CSS、ECharts、Supabase JS SDK
 - [x] 配置 `src/lib/supabase.js`（从环境变量读 URL 和 key）
+- [x] 配置 `src/lib/db.js`（统一数据访问入口，未配置 Supabase 时使用 mock 数据）
 - [x] 配置 `src/router/index.js`（所有路由，页面组件暂为空占位）
 - [x] 配置 `src/stores/user.js`（Pinia，存 session 和 user 对象）
 - [x] 创建所有组件目录和空的 `index.vue` 文件

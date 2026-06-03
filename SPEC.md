@@ -166,3 +166,8 @@ const { data, error } = await supabase
   .eq('user_id', userId)
   .order('created_at', { ascending: false })
 ```
+
+## 数据访问规范
+
+所有组件通过 `@/lib/db` 访问数据，不直接调用 supabase。
+未配置 VITE_SUPABASE_URL 时自动使用 mock 数据。
