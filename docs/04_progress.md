@@ -10,7 +10,7 @@
 
 ## 已完成
 
-- [ ] （待填写）
+- [x] T01 项目骨架 — Vue 3 + Vite + Router + Pinia + Tailwind + Supabase 基础结构已完成并通过构建验证
 
 ---
 
@@ -18,7 +18,7 @@
 
 | 任务 | 负责人 | 分支 | 状态 |
 |---|---|---|---|
-| T01 骨架 | 张老师 | main | 未开始 |
+| T01 骨架 | Asher | main | 已完成 |
 | T02 Layout | | feature/layout | 未开始 |
 | T03 Auth | | feature/auth | 未开始 |
 | T04 课程选择 | | feature/lesson-select | 未开始 |
@@ -44,7 +44,6 @@
 
 ## 下一步
 
-1. 张老师完成 T01 骨架搭建，推送到 main
-2. 开会分配 T02-T09 负责人
-3. 所有人 clone 仓库，checkout 自己的分支
-4. T05 打字引擎优先，其他模块可以先用假数据
+1. 开会分配 T02-T09 负责人
+2. 所有人 clone 仓库，checkout 自己的分支
+3. T05 打字引擎优先，其他模块可以先用假数据

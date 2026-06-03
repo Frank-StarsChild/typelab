@@ -10,14 +10,14 @@
 **负责人**：Asher
 **分支**：`main`（直接初始化）
 
-- [ ] `npm create vue@latest`，选 Vue Router + Pinia，不选 TypeScript
-- [ ] 安装 Tailwind CSS、ECharts、Supabase JS SDK
-- [ ] 配置 `src/lib/supabase.js`（从环境变量读 URL 和 key）
-- [ ] 配置 `src/router/index.js`（所有路由，页面组件暂为空占位）
-- [ ] 配置 `src/stores/user.js`（Pinia，存 session 和 user 对象）
-- [ ] 创建所有组件目录和空的 `index.vue` 文件
-- [ ] 配置 Vercel 部署，环境变量设置好
-- [ ] 验证：`npm run dev` 能启动，所有路由跳转不报错
+- [x] `npm create vue@latest`，选 Vue Router + Pinia，不选 TypeScript
+- [x] 安装 Tailwind CSS、ECharts、Supabase JS SDK
+- [x] 配置 `src/lib/supabase.js`（从环境变量读 URL 和 key）
+- [x] 配置 `src/router/index.js`（所有路由，页面组件暂为空占位）
+- [x] 配置 `src/stores/user.js`（Pinia，存 session 和 user 对象）
+- [x] 创建所有组件目录和空的 `index.vue` 文件
+- [x] 配置 Vercel 部署，环境变量设置好
+- [x] 验证：`npm run dev` 能启动，所有路由跳转不报错
 
 ---
 
