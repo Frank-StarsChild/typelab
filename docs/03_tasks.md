@@ -17,7 +17,7 @@
 - [x] 配置 `src/router/index.js`（所有路由，页面组件暂为空占位）
 - [x] 配置 `src/stores/user.js`（Pinia，存 session 和 user 对象）
 - [x] 创建所有组件目录和空的 `index.vue` 文件
-- [x] 配置 Vercel 部署，环境变量设置好
+- [x] 配置 Vercel 部署；Supabase 环境变量仅上线或真实后端联调时配置
 - [x] 验证：`npm run dev` 能启动，所有路由跳转不报错
 
 ---
@@ -50,10 +50,10 @@
 
 - [ ] 登录表单（邮箱 + 密码）
 - [ ] 注册表单（邮箱 + 密码 + 确认密码）
-- [ ] 调用 `supabase.auth.signInWithPassword()` 和 `supabase.auth.signUp()`
+- [ ] 调用 `src/lib/db.js` 封装的登录和注册函数（开发阶段走 mock，上线阶段走 Supabase）
 - [ ] 成功后更新 Pinia user store，跳转首页
 - [ ] 失败时在表单下方显示错误信息（不用 alert）
-- [ ] 退出登录调用 `supabase.auth.signOut()`
+- [ ] 退出登录调用 `src/lib/db.js` 封装的退出函数
 
 验收：
 ```
@@ -131,7 +131,7 @@ npm run test -- TypingEngine   （Vitest 单元测试）
 
 - [ ] 从路由 state 接收 `{ wpm, accuracy, duration, errors, lessonId }`
 - [ ] 显示本次成绩：WPM、准确率、用时、错误数
-- [ ] 已登录：查询 Supabase，显示"本课程历史最佳 WPM"
+- [ ] 已登录：通过 `src/lib/db.js` 查询本课程历史最佳 WPM（开发阶段 mock，上线阶段 Supabase）
 - [ ] 两个按钮：再来一次（跳回同一课程）、选其他课程（跳回首页）
 - [ ] 未登录时显示"登录后成绩将自动保存"的提示
 
@@ -150,7 +150,7 @@ npm run test -- TypingEngine   （Vitest 单元测试）
 **分支**：`feature/leaderboard`  
 **文件范围**：`src/components/Leaderboard/`、`src/views/LeaderboardView.vue`
 
-- [ ] 查询 Supabase results 表，按 `max(wpm)` 分组排序
+- [ ] 通过 `src/lib/db.js` 查询排行榜数据（开发阶段 mock 聚合，上线阶段 Supabase 聚合）
 - [ ] 展示前 20 名：排名、邮箱（只显示 @ 前的部分）、最高 WPM、准确率
 - [ ] 当前登录用户的行高亮
 - [ ] 每 30 秒自动刷新
@@ -172,7 +172,7 @@ npm run test -- TypingEngine   （Vitest 单元测试）
 **文件范围**：`src/components/Profile/`、`src/views/ProfileView.vue`
 
 - [ ] 未登录访问时跳转 `/login`（路由守卫）
-- [ ] 查询当前用户的所有 results 记录，按时间倒序
+- [ ] 通过 `src/lib/db.js` 查询当前用户的所有 results 记录，按时间倒序
 - [ ] 表格展示历史记录：课程名、WPM、准确率、时间
 - [ ] ECharts 折线图：横轴为时间，纵轴为 WPM，展示进步趋势
 - [ ] 统计卡片：总练习次数、平均 WPM、最高 WPM
