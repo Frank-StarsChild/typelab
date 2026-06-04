@@ -69,6 +69,69 @@ git push origin feature/你的模块名
 
 ---
 
+## 代码风格与自动检查
+
+代码格式和常见代码问题统一交给 Biome 处理，review 时不围绕个人偏好争论空格、换行、引号等细节。
+
+- 使用 Biome 统一格式化代码、检查 lint 问题。
+- 提交前至少执行：
+
+```bash
+npm run check
+npm run build
+```
+
+- 如果需要自动修复格式和可自动修复的问题，执行：
+
+```bash
+npm run check:fix
+```
+
+- 也可以按需单独执行：
+
+```bash
+npm run format        # 自动格式化
+npm run format:check  # 只检查格式，不修改文件
+npm run lint          # 只检查 lint 问题
+```
+
+- 不手动大范围调整无关文件格式，避免 PR diff 变大。
+- Biome 能修复的问题，优先用 `npm run check:fix` 修复；Biome 不能判断的问题，再交给 reviewer 判断。
+
+---
+
+## 代码可读性规范
+
+代码应优先保证清晰、简单、容易 review。功能可以先做小，不要为了“一次写完”把逻辑写复杂。
+
+- 单个函数尽量只做一件事。
+- 逻辑嵌套建议不超过 3 层；超过时优先考虑 early return、拆函数、拆组件。
+- Vue 组件不要承担过多职责：页面结构放 view，复用 UI 放 components，跨页面状态放 Pinia store，通用逻辑可拆成工具函数或 composable。
+- 不在 template 中写复杂表达式；复杂判断应放到 `computed` 或函数中。
+- 避免复制粘贴大段重复代码；重复出现 2 次以上时考虑抽成函数或组件。
+- 命名要表达意图，避免使用 `data`、`temp`、`foo` 这类含义不清的名字。
+- PR 中只修改当前任务相关文件；无关重构、格式化、文档修正应单独提交或单独 PR。
+
+示例：
+
+```js
+// 不推荐：嵌套太深
+if (user) {
+  if (user.session) {
+    if (route.meta.requiresAuth) {
+      // ...
+    }
+  }
+}
+
+// 推荐：优先返回，降低嵌套
+if (!user?.session) return
+if (!route.meta.requiresAuth) return
+// ...
+```
+
+---
+
 ## Commit 格式
 
 ```
