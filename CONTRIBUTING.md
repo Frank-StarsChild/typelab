@@ -3,44 +3,49 @@
 ## 第一次设置
 
 ```bash
-# 1. 克隆仓库
-git clone [仓库地址]
+# 1. 先在 GitHub 上 fork 主仓库到自己的账号
+
+# 2. 克隆自己的 fork
+git clone [你的 fork 地址]
 cd typelab
 
-# 2. 安装依赖
+# 3. 添加主仓库为 upstream，方便同步最新 dev 分支
+git remote add upstream [主仓库地址]
+
+# 4. 安装依赖
 npm install
 
-# 3. 配置环境变量（向项目维护者获取这两个值）
-# 在项目根目录新建 .env.local 文件，写入：
-# VITE_SUPABASE_URL=xxx
-# VITE_SUPABASE_ANON_KEY=xxx
-
-# 4. 启动开发服务器
+# 5. 启动开发服务器
 npm run dev
 # 浏览器打开 http://localhost:5173
 ```
+
+开发阶段默认使用 `src/lib/db.js` 中的 mock 数据，不需要配置自己的 `.env.local`，也不需要连接 Supabase。只有上线部署或真实后端联调时，才需要配置 Supabase 环境变量。
 
 ---
 
 ## 每次开发的流程
 
 ```bash
-# 第一步：拉最新代码
-git checkout dev
-git pull origin dev
+# 第一步：同步主仓库 dev 分支
+git fetch upstream
+git checkout -B dev upstream/dev
 
-# 第二步：切到自己的分支（第一次需要创建）
+# 第二步：推送最新 dev 到自己的 fork
+git push origin dev
+
+# 第三步：切到自己的功能分支（第一次需要创建）
 git checkout -b feature/你的模块名   # 第一次
 git checkout feature/你的模块名     # 之后每次
 
-# 第三步：写代码
+# 第四步：写代码
 # ...
 
-# 第四步：提交
+# 第五步：提交
 git add .
 git commit -m "新增：xxx"
 
-# 第五步：推送
+# 第六步：推送到自己的 fork
 git push origin feature/你的模块名
 ```
 
@@ -48,10 +53,10 @@ git push origin feature/你的模块名
 
 ## 开 PR
 
-1. 推送后去 CNB 仓库页面
-2. 点击「新建合并请求」
-3. 源分支：`feature/你的模块名`，目标分支：`dev`
-4. 填写 PR 描述（见下方模板）
+1. 推送后去 GitHub 仓库页面
+2. 从自己的 fork 发起 Pull Request
+3. 源分支：`你的 GitHub 用户名:feature/你的模块名`，目标分支：主仓库 `dev`
+4. 填写 PR 描述（GitHub 会自动带出 `.github/pull_request_template.md`）
 5. 提交后等待项目维护者或同学 review
 
 **PR 描述模板：**
