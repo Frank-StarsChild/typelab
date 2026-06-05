@@ -24,7 +24,7 @@
 
 ## T02 — Layout 与导航
 
-**负责人**：\_\_\_\_  
+**负责人**：Yang
 **分支**：`feature/layout`  
 **文件范围**：`src/components/Layout/`、`src/App.vue`
 
@@ -44,7 +44,7 @@
 
 ## T03 — 用户认证
 
-**负责人**：\_\_\_\_  
+**负责人**：Yang 
 **分支**：`feature/auth`  
 **文件范围**：`src/components/Auth/`、`src/views/LoginView.vue`
 
@@ -67,7 +67,7 @@
 
 ## T04 — 课程选择
 
-**负责人**：\_\_\_\_  
+**负责人**：Kalin
 **分支**：`feature/lesson-select`  
 **文件范围**：`src/components/LessonSelect/`、`src/views/HomeView.vue`、`src/lessons/index.js`
 
@@ -88,7 +88,7 @@
 
 ## T05 — 打字引擎（核心）
 
-**负责人**：\_\_\_\_ （分配给最强的人）  
+**负责人**：Frank  
 **分支**：`feature/typing-engine`  
 **文件范围**：`src/components/TypingEngine/index.vue`
 
@@ -125,7 +125,7 @@ npm run test -- TypingEngine   （Vitest 单元测试）
 
 ## T06 — 成绩结果页
 
-**负责人**：\_\_\_\_  
+**负责人**：Eve
 **分支**：`feature/result`  
 **文件范围**：`src/components/Result/`、`src/views/ResultView.vue`
 
@@ -146,7 +146,7 @@ npm run test -- TypingEngine   （Vitest 单元测试）
 
 ## T07 — 排行榜
 
-**负责人**：\_\_\_\_  
+**负责人**：Sy
 **分支**：`feature/leaderboard`  
 **文件范围**：`src/components/Leaderboard/`、`src/views/LeaderboardView.vue`
 
@@ -167,7 +167,7 @@ npm run test -- TypingEngine   （Vitest 单元测试）
 
 ## T08 — 个人主页
 
-**负责人**：\_\_\_\_  
+**负责人**：Luna & Chen
 **分支**：`feature/profile`  
 **文件范围**：`src/components/Profile/`、`src/views/ProfileView.vue`
 
@@ -188,7 +188,7 @@ npm run test -- TypingEngine   （Vitest 单元测试）
 
 ## T09 — 题库内容（持续）
 
-**负责人**：\_\_\_\_（可多人参与，提 PR 即可）  
+**负责人** Gong  
 **分支**：`content/xxx`  
 **文件范围**：`src/lessons/` 目录
 
