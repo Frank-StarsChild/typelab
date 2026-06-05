@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   text: {
@@ -8,18 +8,67 @@ const props = defineProps({
   },
 })
 
-defineEmits(['complete'])
+const emit = defineEmits(['complete'])
 
-const chars = computed(() => {
-  return props.text.split('').map((char) => ({
+const chars = ref(
+  props.text.split('').map((char) => ({
     char,
     status: 'pending',
   }))
+)
+
+const currentIndex = ref(0)
+
+function handleKeyDown(e) {
+  if (currentIndex.value >= chars.value.length) return
+
+  if (e.key === 'Tab') {
+    e.preventDefault()
+    if (chars.value[currentIndex.value].char === '\t') {
+      chars.value[currentIndex.value].status = 'correct'
+      currentIndex.value++
+    } else {
+      chars.value[currentIndex.value].status = 'wrong'
+      currentIndex.value++
+    }
+    return
+  }
+
+  if (e.key.length === 1) {
+    const expected = chars.value[currentIndex.value].char
+    if (e.key === expected) {
+      chars.value[currentIndex.value].status = 'correct'
+    } else {
+      chars.value[currentIndex.value].status = 'wrong'
+    }
+    currentIndex.value++
+  }
+}
+
+function onFocus() {
+  window.addEventListener('keydown', handleKeyDown)
+}
+
+function onBlur() {
+  window.removeEventListener('keydown', handleKeyDown)
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown)
 })
 </script>
 
 <template>
-  <div class="font-mono text-lg leading-relaxed">
+  <div
+    class="font-mono text-lg leading-relaxed"
+    tabindex="0"
+    @focus="onFocus"
+    @blur="onBlur"
+  >
     <div class="flex flex-wrap">
       <span
         v-for="(item, index) in chars"
@@ -38,7 +87,7 @@ const chars = computed(() => {
         <span v-else-if="item.char === '\t'">→</span>
         <span v-else>{{ item.char }}</span>
         <span
-          v-if="index === 0 && item.status === 'pending'"
+          v-if="index === currentIndex && item.status === 'pending'"
           class="absolute -bottom-0.5 left-0 h-0.5 w-full bg-blue-500"
         ></span>
       </span>
