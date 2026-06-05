@@ -1,7 +1,7 @@
 <script setup>
-// TypingEngine 组件接口遵循 SPEC.md。
-// 不在骨架阶段实现打字状态、计时、WPM、准确率等内部逻辑。
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   text: {
     type: String,
     required: true,
@@ -9,10 +9,39 @@ defineProps({
 })
 
 defineEmits(['complete'])
+
+const chars = computed(() => {
+  return props.text.split('').map((char) => ({
+    char,
+    status: 'pending',
+  }))
+})
 </script>
 
 <template>
-  <div>
-    <!-- TypingEngine: 核心打字组件占位；不依赖 Supabase / 路由 / 登录状态。 -->
+  <div class="font-mono text-lg leading-relaxed">
+    <div class="flex flex-wrap">
+      <span
+        v-for="(item, index) in chars"
+        :key="index"
+        class="relative"
+        :class="{
+          'text-slate-400': item.status === 'pending',
+          'text-green-600': item.status === 'correct',
+          'text-red-500': item.status === 'wrong',
+        }"
+      >
+        <span
+          v-if="item.char === '\n'"
+          class="whitespace-pre-wrap"
+        >↵</span>
+        <span v-else-if="item.char === '\t'">→</span>
+        <span v-else>{{ item.char }}</span>
+        <span
+          v-if="index === 0 && item.status === 'pending'"
+          class="absolute -bottom-0.5 left-0 h-0.5 w-full bg-blue-500"
+        ></span>
+      </span>
+    </div>
   </div>
 </template>
