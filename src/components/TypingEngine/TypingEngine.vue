@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 const props = defineProps({
   text: {
@@ -45,14 +45,6 @@ function handleKeyDown(e) {
   }
 }
 
-function onFocus() {
-  window.addEventListener('keydown', handleKeyDown)
-}
-
-function onBlur() {
-  window.removeEventListener('keydown', handleKeyDown)
-}
-
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown)
 })
@@ -66,8 +58,6 @@ onUnmounted(() => {
   <div
     class="font-mono text-lg leading-relaxed"
     tabindex="0"
-    @focus="onFocus"
-    @blur="onBlur"
   >
     <div class="flex flex-wrap">
       <span
