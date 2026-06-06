@@ -1,6 +1,8 @@
 <script setup>
+//导入规范：按照首字母顺序
 import { computed, ref } from 'vue'
 
+//组件通信（父传子）：string类型的text（必传）
 const props = defineProps({
   text: {
     type: String,
@@ -8,23 +10,62 @@ const props = defineProps({
   },
 })
 
+//组件通信（子传父）：打字完成触发complete事件
 defineEmits(['complete'])
 
+//ref 绑定响应式数据，表示当前在哪一个字符，初始化为0
 const currentIndex = ref(0)
+const isStarted = ref(false)
+const startTime = ref(null)
+const errorCount = ref(0)
 
-const chars = computed(() => {
-  return props.text.split('').map((char, index) => {
-    let status = 'pending'
-    if (index < currentIndex.value) {
-      status = 'correct'
+//computed 绑定响应式数据，表示当前字符的状态
+const chars = ref(
+  props.text.split('').map((char, index) => ({
+    char,
+    status: 'pending',
+    index,
+  })),
+)
+
+function handleKeydown(e) {
+  if (currentIndex.value >= chars.value.length) {
+    return
+  }
+
+  if (e.key === 'Tab') {
+    e.preventDefault()
+    if (chars.value[currentIndex.value].char === '\t') {
+      chars.value[currentIndex.value].status = 'correct'
+      currentIndex.value++
     }
-    return { char, status, index }
-  })
-})
+    return
+  }
+
+  if (e.key.length !== 1) {
+    return
+  }
+
+  if (!isStarted.value) {
+    isStarted.value = true
+    startTime.value = Date.now()
+  }
+
+  const currentChar = chars.value[currentIndex.value]
+
+  if (e.key === currentChar.char) {
+    currentChar.status = 'correct'
+  } else {
+    currentChar.status = 'wrong'
+    errorCount.value++
+  }
+
+  currentIndex.value++
+}
 </script>
 
 <template>
-  <div class="typing-engine">
+  <div class="typing-engine" tabindex="0" @keydown="handleKeydown">
     <div class="text-display">
       <span
         v-for="item in chars"
@@ -46,6 +87,7 @@ const chars = computed(() => {
   padding: 2rem;
   border-radius: 8px;
   min-height: 200px;
+  outline: none;
 }
 
 .text-display {
