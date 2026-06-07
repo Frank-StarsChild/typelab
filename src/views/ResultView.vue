@@ -34,20 +34,23 @@ onMounted(async () => {
     result.value = state
   }
 
-  if (userStore.session) {
-    const { data } = await getBestLessonWpm(userStore.user.id, state.lessonId)
-    bestWpm.value = data || 0
+  if (userStore.user) {
+    const { data } = await getBestLessonWpm(userStore.user.id, result.value.lessonId)
+    bestWpm.value = data ?? null
 
     saving.value = true
-    await saveResult({
-      user_id: userStore.user.id,
-      lesson_id: state.lessonId,
-      wpm: state.wpm,
-      accuracy: state.accuracy,
-      duration: state.duration,
-      errors: state.errors,
-    })
-    saving.value = false
+    try {
+      await saveResult({
+        user_id: userStore.user.id,
+        lesson_id: result.value.lessonId,
+        wpm: result.value.wpm,
+        accuracy: result.value.accuracy,
+        duration: result.value.duration,
+        errors: result.value.errors,
+      })
+    } finally {
+      saving.value = false
+    }
   }
 })
 

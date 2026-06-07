@@ -100,9 +100,10 @@ export async function listUserResults(userId) {
 
 export async function getBestLessonWpm(userId, lessonId) {
   if (isUsingMockData()) {
-    const bestWpm = mockResults
-      .filter((result) => result.user_id === userId && result.lesson_id === lessonId)
-      .reduce((best, result) => Math.max(best, result.wpm), 0)
+    const matches = mockResults.filter(
+      (result) => result.user_id === userId && result.lesson_id === lessonId,
+    )
+    const bestWpm = matches.length > 0 ? Math.max(...matches.map((r) => r.wpm)) : null
 
     return { data: bestWpm, error: null }
   }
@@ -116,7 +117,7 @@ export async function getBestLessonWpm(userId, lessonId) {
     .limit(1)
     .maybeSingle()
 
-  return { data: data?.wpm ?? 0, error }
+  return { data: data?.wpm ?? null, error }
 }
 
 export async function listLeaderboard() {
