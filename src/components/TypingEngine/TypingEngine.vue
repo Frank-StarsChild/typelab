@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 
 const props = defineProps({
   text: {
@@ -10,21 +10,45 @@ const props = defineProps({
 
 const emit = defineEmits(['complete'])
 
-const chars = ref(
-  props.text.split('').map((char) => ({
-    char,
-    status: 'pending',
-  }))
+const chars = ref([])
+const currentIndex = ref(0)
+const container = ref(null)
+let isCompleted = false
+
+watch(
+  () => props.text,
+  async (newText) => {
+    chars.value = newText.split('').map((char) => ({
+      char,
+      status: 'pending',
+    }))
+    currentIndex.value = 0
+    isCompleted = false
+
+    await nextTick()
+    container.value?.focus()
+  },
+  { immediate: true },
 )
 
-const currentIndex = ref(0)
-
 function handleKeyDown(e) {
+  if (isCompleted) return
+
+  if (e.key === 'Backspace') {
+    if (currentIndex.value > 0) {
+      currentIndex.value--
+      chars.value[currentIndex.value].status = 'pending'
+    }
+    return
+  }
+
   if (currentIndex.value >= chars.value.length) return
 
-  if (e.key === 'Tab') {
-    e.preventDefault()
-    if (chars.value[currentIndex.value].char === '\t') {
+  const expected = chars.value[currentIndex.value].char
+
+  if (expected === '\t') {
+    if (e.key === 'Tab' || e.key === ' ') {
+      e.preventDefault()
       chars.value[currentIndex.value].status = 'correct'
       currentIndex.value++
     } else {
@@ -34,8 +58,9 @@ function handleKeyDown(e) {
     return
   }
 
+  if (e.isComposing) return
+
   if (e.key.length === 1) {
-    const expected = chars.value[currentIndex.value].char
     if (e.key === expected) {
       chars.value[currentIndex.value].status = 'correct'
     } else {
@@ -43,44 +68,54 @@ function handleKeyDown(e) {
     }
     currentIndex.value++
   }
+
+  if (currentIndex.value >= chars.value.length) {
+    isCompleted = true
+    emit('complete')
+  }
 }
-
-onMounted(() => {
-  window.addEventListener('keydown', handleKeyDown)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyDown)
-})
 </script>
 
 <template>
   <div
-    class="font-mono text-lg leading-relaxed"
+    ref="container"
+    class="font-mono text-lg leading-relaxed whitespace-pre-wrap break-words"
     tabindex="0"
+    @keydown="handleKeyDown"
+    @click="container?.focus()"
   >
-    <div class="flex flex-wrap">
-      <span
-        v-for="(item, index) in chars"
-        :key="index"
-        class="relative"
-        :class="{
-          'text-slate-400': item.status === 'pending',
-          'text-green-600': item.status === 'correct',
-          'text-red-500': item.status === 'wrong',
-        }"
-      >
-        <span
-          v-if="item.char === '\n'"
-          class="whitespace-pre-wrap"
-        >↵</span>
-        <span v-else-if="item.char === '\t'">→</span>
-        <span v-else>{{ item.char }}</span>
-        <span
-          v-if="index === currentIndex && item.status === 'pending'"
-          class="absolute -bottom-0.5 left-0 h-0.5 w-full bg-blue-500"
-        ></span>
-      </span>
-    </div>
+    <span
+      v-for="(item, index) in chars"
+      :key="index"
+      class="relative"
+      :class="{
+        'text-slate-400': item.status === 'pending',
+        'text-green-600': item.status === 'correct',
+        'text-red-500': item.status === 'wrong',
+        'caret': index === currentIndex && item.status === 'pending',
+      }"
+    >{{ item.char }}</span>
+    <span
+      v-if="currentIndex >= chars.length && chars.length > 0"
+      class="caret"
+    ></span>
   </div>
 </template>
+
+<style scoped>
+.caret::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: #3b82f6;
+  margin-left: 1px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+</style>
