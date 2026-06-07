@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, onUnmounted, ref, watch } from 'vue'
 
 const props = defineProps({
   text: {
@@ -16,11 +16,13 @@ const currentIndex = ref(0)
 const container = ref(null)
 let isCompleted = false
 let startTime = null
+let progressTimer = null
 
 /* ==================== 监听 text 变化，重置状态 ==================== */
 watch(
   () => props.text,
   async (newText) => {
+    stopProgressTimer()
     chars.value = newText.split('').map((char) => ({
       char,
       status: 'pending',
@@ -53,6 +55,27 @@ function calculateAccuracy() {
   return Math.round((correct / typed.length) * 100)
 }
 
+/* ==================== 定时器管理 ==================== */
+function startProgressTimer() {
+  if (progressTimer) return
+  progressTimer = setInterval(() => {
+    if (startTime && !isCompleted) {
+      emit('progress', { wpm: calculateWpm(), accuracy: calculateAccuracy() })
+    }
+  }, 1000)
+}
+
+function stopProgressTimer() {
+  if (progressTimer) {
+    clearInterval(progressTimer)
+    progressTimer = null
+  }
+}
+
+onUnmounted(() => {
+  stopProgressTimer()
+})
+
 /* ==================== 键盘事件处理 ==================== */
 function handleKeyDown(e) {
   if (isCompleted) return
@@ -79,6 +102,7 @@ function handleKeyDown(e) {
   // 首次按键时记录开始时间
   if (!startTime) {
     startTime = Date.now()
+    startProgressTimer()
   }
 
   const expected = chars.value[currentIndex.value].char
@@ -121,6 +145,7 @@ function handleKeyDown(e) {
 
   // 打字完成，触发 complete 事件
   if (currentIndex.value >= chars.value.length) {
+    stopProgressTimer()
     isCompleted = true
     const duration = Math.max(1, Math.floor((Date.now() - startTime) / 1000))
     const correctCount = chars.value.filter((c) => c.status === 'correct').length
