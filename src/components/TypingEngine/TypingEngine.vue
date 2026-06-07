@@ -42,36 +42,44 @@ function handleKeyDown(e) {
     return
   }
 
-  if (currentIndex.value >= chars.value.length) return
-
-  const expected = chars.value[currentIndex.value].char
-
-  if (expected === '\t') {
-    if (e.key === 'Tab' || e.key === ' ') {
-      e.preventDefault()
-      chars.value[currentIndex.value].status = 'correct'
-      currentIndex.value++
-    } else {
-      chars.value[currentIndex.value].status = 'wrong'
-      currentIndex.value++
-    }
-    return
-  }
-
   if (e.isComposing) return
 
-  if (e.key.length === 1) {
-    if (e.key === expected) {
-      chars.value[currentIndex.value].status = 'correct'
-    } else {
-      chars.value[currentIndex.value].status = 'wrong'
-    }
-    currentIndex.value++
-  }
+  if (currentIndex.value >= chars.value.length) return
 
   if (currentIndex.value >= chars.value.length) {
     isCompleted = true
     emit('complete')
+  }
+
+  const expected = chars.value[currentIndex.value].char
+
+  switch (e.key) {
+    case 'Tab':
+      e.preventDefault()
+      if (expected === '\t' && (e.key === 'Tab' || e.key === ' ')) {
+        chars.value[currentIndex.value].status = 'correct'
+      } else {
+        chars.value[currentIndex.value].status = 'wrong'
+      }
+      currentIndex.value++
+      break
+    case 'Enter':
+      chars.value[currentIndex.value].status = expected === '\n' ? 'correct' : 'wrong'
+      currentIndex.value++
+      break
+    case ' ':
+      if (expected === '\t') {
+        chars.value[currentIndex.value].status = 'correct'
+      } else {
+        chars.value[currentIndex.value].status = e.key === expected ? 'correct' : 'wrong'
+      }
+      currentIndex.value++
+      break
+    default:
+      if (e.key.length === 1) {
+        chars.value[currentIndex.value].status = e.key === expected ? 'correct' : 'wrong'
+        currentIndex.value++
+      }
   }
 }
 </script>

@@ -9,7 +9,7 @@ const props = defineProps({
 })
 
 function handleComplete() {
-  console.log('Typing completed')
+  console.log('恭喜你输入完成！')
 }
 </script>
 
